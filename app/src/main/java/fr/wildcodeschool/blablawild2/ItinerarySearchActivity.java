@@ -2,11 +2,18 @@ package fr.wildcodeschool.blablawild2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ItinerarySearchActivity extends AppCompatActivity {
 
@@ -36,10 +43,26 @@ public class ItinerarySearchActivity extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(ItinerarySearchActivity.this, ItineraryListActivity.class);
                     TripModel tripModel = new TripModel(departure, destination, date);
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference tripRef = database.getReference("trips");
+                    String tripsKey = tripRef.push().getKey();
+                    tripRef.child(tripsKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                    tripRef.child(tripsKey).setValue(tripModel);
                     intent.putExtra(EXTRA_TRIP, tripModel);
                     startActivity(intent);
                 }
+
+
             }
         });
     }

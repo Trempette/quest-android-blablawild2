@@ -13,6 +13,9 @@ public class TripModel implements Parcelable {
     private String destination;
     private String date;
 
+    public TripModel() {
+    }
+
     public TripModel(String departure, String destination, String date) {
         this.departure = departure;
         this.destination = destination;
